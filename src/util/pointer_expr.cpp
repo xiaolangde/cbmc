@@ -138,7 +138,7 @@ field_address_exprt::field_address_exprt(
   pointer_typet _type)
   : unary_exprt(ID_field_address, std::move(base), std::move(_type))
 {
-  const auto &base_type = base.type();
+  const auto &base_type = field_address_exprt::base().type();
   PRECONDITION(base_type.id() == ID_pointer);
   const auto &base_sub_type = base_type.subtype();
   PRECONDITION(
