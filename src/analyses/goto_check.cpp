@@ -25,6 +25,7 @@ Author: Daniel Kroening, kroening@kroening.com
 #include <util/ieee_float.h>
 #include <util/invariant.h>
 #include <util/make_unique.h>
+#include <util/mathematical_expr.h>
 #include <util/options.h>
 #include <util/pointer_expr.h>
 #include <util/pointer_offset_size.h>
@@ -1747,11 +1748,19 @@ void goto_checkt::check_rec_arithmetic_op(
 
 void goto_checkt::check_rec(const exprt &expr, const guardt &guard)
 {
-  // we don't look into quantifiers
   if(expr.id() == ID_exists || expr.id() == ID_forall)
-    return;
+  {
+    // the scoped variables may be used in the assertion
+    const auto &quantifier_expr = to_quantifier_expr(expr);
 
-  if(expr.id() == ID_address_of)
+    auto new_guard = [&guard, &quantifier_expr](exprt expr) {
+      return guard(forall_exprt(quantifier_expr.symbol(), expr));
+    };
+
+    check_rec(quantifier_expr.where(), new_guard);
+    return;
+  }
+  else if(expr.id() == ID_address_of)
   {
     check_rec_address(to_address_of_expr(expr).object(), guard);
     return;
