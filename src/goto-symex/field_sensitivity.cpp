@@ -204,7 +204,7 @@ exprt field_sensitivityt::get_fields(
 
     for(std::size_t i = 0; i < array_size; ++i)
     {
-      const index_exprt index(array, from_integer(i, index_type()));
+      const index_exprt index(array, from_integer(i, type.index_type()));
       ssa_exprt tmp = ssa_expr;
       bool was_l2 = !tmp.get_level_2().empty();
       tmp.remove_level_2();
@@ -318,7 +318,7 @@ void field_sensitivityt::field_assignments_rec(
     exprt::operandst::const_iterator fs_it = lhs_fs.operands().begin();
     for(std::size_t i = 0; i < array_size; ++i)
     {
-      const index_exprt index_rhs(lhs, from_integer(i, index_type()));
+      const index_exprt index_rhs(lhs, from_integer(i, type->index_type()));
       const exprt &index_lhs = *fs_it;
 
       field_assignments_rec(
