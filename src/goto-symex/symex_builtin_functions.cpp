@@ -197,7 +197,7 @@ void goto_symext::symex_allocate(
   {
     const auto &array_type = to_array_type(*object_type);
     index_exprt index_expr(
-      value_symbol.symbol_expr(), from_integer(0, index_type()));
+      value_symbol.symbol_expr(), from_integer(0, array_type.index_type()));
     rhs = address_of_exprt(index_expr, pointer_type(array_type.subtype()));
   }
   else
