@@ -25,6 +25,7 @@ public:
   }
 
   // These have a sub-type
+  using typet::subtype;
 };
 
 /// Check whether a reference to a typet is a \ref c_bit_field_typet.

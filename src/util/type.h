@@ -44,6 +44,7 @@ public:
   }
 #endif
 
+protected:
   const typet &subtype() const
   {
     if(get_sub().empty())
@@ -59,6 +60,7 @@ public:
     return static_cast<typet &>(sub.front());
   }
 
+public:
   bool has_subtypes() const
   { return !get_sub().empty(); }
 
@@ -149,6 +151,8 @@ public:
     : typet(std::move(_id), std::move(_subtype))
   {
   }
+
+  using typet::subtype;
 };
 
 inline const type_with_subtypet &to_type_with_subtype(const typet &type)

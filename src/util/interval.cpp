@@ -24,6 +24,7 @@
 #include <util/symbol_table.h>
 
 #include "bitvector_expr.h"
+#include "c_types.h"
 #include "simplify_expr.h"
 
 const exprt &constant_interval_exprt::get_lower() const
@@ -1126,20 +1127,22 @@ bool constant_interval_exprt::is_bitvector(const typet &t)
 {
   return t.id() == ID_bv || t.id() == ID_signedbv || t.id() == ID_unsignedbv ||
          t.id() == ID_c_bool ||
-         (t.id() == ID_c_bit_field && is_bitvector(t.subtype()));
+         (t.id() == ID_c_bit_field &&
+          is_bitvector(to_c_bit_field_type(t).subtype()));
 }
 
 bool constant_interval_exprt::is_signed(const typet &t)
 {
-  return t.id() == ID_signedbv ||
-         (t.id() == ID_c_bit_field && is_signed(t.subtype()));
+  return t.id() == ID_signedbv || (t.id() == ID_c_bit_field &&
+                                   is_signed(to_c_bit_field_type(t).subtype()));
 }
 
 bool constant_interval_exprt::is_unsigned(const typet &t)
 {
   return t.id() == ID_bv || t.id() == ID_unsignedbv || t.id() == ID_c_bool ||
          t.id() == ID_c_enum ||
-         (t.id() == ID_c_bit_field && is_unsigned(t.subtype()));
+         (t.id() == ID_c_bit_field &&
+          is_unsigned(to_c_bit_field_type(t).subtype()));
 }
 
 bool constant_interval_exprt::is_signed(const constant_interval_exprt &interval)

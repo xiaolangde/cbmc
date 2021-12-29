@@ -140,7 +140,7 @@ field_address_exprt::field_address_exprt(
 {
   const auto &base_type = base.type();
   PRECONDITION(base_type.id() == ID_pointer);
-  const auto &base_sub_type = base_type.subtype();
+  const auto &base_sub_type = to_pointer_type(base_type).subtype();
   PRECONDITION(
     base_sub_type.id() == ID_struct || base_sub_type.id() == ID_struct_tag ||
     base_sub_type.id() == ID_union || base_sub_type.id() == ID_union_tag);

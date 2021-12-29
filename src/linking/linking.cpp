@@ -119,7 +119,8 @@ std::string linkingt::type_to_string_verbose(
   }
   else if(followed.id()==ID_pointer)
   {
-    return type_to_string_verbose(symbol, followed.subtype()) + " *";
+    return type_to_string_verbose(symbol, to_pointer_type(followed).subtype()) +
+           " *";
   }
 
   return type_to_string(symbol.name, type);
@@ -1252,9 +1253,12 @@ bool linkingt::needs_renaming_type(
     to_union_type(new_symbol.type).is_incomplete())
     return false; // not different
 
-  if(old_symbol.type.id()==ID_array &&
-     new_symbol.type.id()==ID_array &&
-     base_type_eq(old_symbol.type.subtype(), new_symbol.type.subtype(), ns))
+  if(
+    old_symbol.type.id() == ID_array && new_symbol.type.id() == ID_array &&
+    base_type_eq(
+      to_array_type(old_symbol.type).subtype(),
+      to_array_type(new_symbol.type).subtype(),
+      ns))
   {
     if(to_array_type(old_symbol.type).size().is_nil() &&
        to_array_type(new_symbol.type).size().is_not_nil())

@@ -29,6 +29,8 @@ public:
     subtype().swap(_subtype);
   }
 
+  using typet::subtype;
+
   signedbv_typet difference_type() const
   {
     return signedbv_typet(get_width());
@@ -78,7 +80,8 @@ inline pointer_typet &to_pointer_type(typet &type)
 /// if the given typet is a pointer of type void.
 inline bool is_void_pointer(const typet &type)
 {
-  return type.id() == ID_pointer && type.subtype().id() == ID_empty;
+  return type.id() == ID_pointer &&
+         to_pointer_type(type).subtype().id() == ID_empty;
 }
 
 /// The reference type
@@ -628,7 +631,7 @@ class dereference_exprt : public unary_exprt
 {
 public:
   explicit dereference_exprt(const exprt &op)
-    : unary_exprt(ID_dereference, op, op.type().subtype())
+    : unary_exprt(ID_dereference, op, to_pointer_type(op.type()).subtype())
   {
     PRECONDITION(op.type().id() == ID_pointer);
   }
